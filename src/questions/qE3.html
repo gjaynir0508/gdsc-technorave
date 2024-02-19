@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Crack it!</title>
+		<link rel="stylesheet" href="/style.css" />
+	</head>
+	<body>
+		<pre
+			class="hljs"
+			style="
+				display: block;
+				overflow-x: auto;
+				padding: 3em;
+				background: rgb(0, 0, 0);
+				color: rgb(170, 170, 170);
+			"
+		><span class="hljs-comment" style="color: rgb(85, 255, 255);">// Code Snippet</span>
+<span class="hljs-keyword" style="color: rgb(255, 255, 85);">const</span> obj = {
+    a: <span class="hljs-number" style="color: rgb(255, 85, 255);">1234</span>,
+    b: {
+        c: <span class="hljs-number" style="color: rgb(255, 85, 255);">2345</span>,
+        d: <span class="hljs-number" style="color: rgb(255, 85, 255);">3678</span>
+    }
+};
+<span class="hljs-keyword" style="color: rgb(255, 255, 85);">const</span> { a, b: { c: d } } = obj;
+<span class="hljs-built_in" style="color: rgb(255, 85, 255);">console</span>.log(d);</pre>
+		<p>What would be logged?</p>
+	</body>
+</html>

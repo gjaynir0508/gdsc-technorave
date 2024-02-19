@@ -1,0 +1,13 @@
+.what {
+	filter: blur(8px);
+}
+
+.where {
+	transform: translateX(-129%);
+}
+
+pre {
+	white-space: nowrap;
+	text-decoration-line: line-through;
+	direction: rtl;
+}

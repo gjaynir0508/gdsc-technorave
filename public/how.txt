@@ -1,0 +1,11 @@
+What was in the background?
+
+    - I don't know maybe same color?.
+        (0, 0, 400, 400)
+
+Generators are nice.
+
+const it = gen();
+it.next();
+it.next();
+...

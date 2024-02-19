@@ -1,0 +1,15 @@
+body {
+	background-color: #f0f0f0;
+	font-family: "Open Sans", sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	margin: 0;
+	padding: 5rem;
+	color: #333;
+	box-sizing: border-box;
+
+	display: grid;
+	place-items: center;
+	height: 100vh;
+	overflow: hidden;
+}
