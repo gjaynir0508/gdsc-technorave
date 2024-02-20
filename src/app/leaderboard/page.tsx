@@ -1,5 +1,6 @@
 import React from "react";
 import { sql } from "@vercel/postgres";
+import { unstable_noStore } from "next/cache";
 
 function msToTime(duration: number) {
 	let milliseconds: number | string = Math.floor((duration % 1000) / 100),
@@ -16,7 +17,12 @@ function msToTime(duration: number) {
 	);
 }
 
+export const metadata = {
+	title: "LeaderBoard - GDSC Digital Odyssey",
+};
+
 export default async function LeaderBoard() {
+	unstable_noStore();
 	const data =
 		await sql`SELECT id, roll, name, starttime, endtime FROM s1 WHERE length(endtime) > 0`;
 	const sorted = data.rows.sort((a, b) => {
@@ -28,11 +34,11 @@ export default async function LeaderBoard() {
 	});
 
 	return (
-		<main className="grid place-items-center h-screen">
+		<main className="grid place-items-center h-screen p-32">
 			<div>
-				<h1>LeaderBoard</h1>
-				<table className="bg-stone-800">
-					<tr className="border-b-2 border-b-orange-300">
+				<h1 className="text-3xl font-bold mb-8">🏆 LeaderBoard</h1>
+				<table className="bg-stone-800 bg-opacity-40">
+					<tr className="bg-stone-800 border-b-2 border-b-orange-300">
 						<th align="left" className="p-4 px-8">
 							#Rank
 						</th>
@@ -46,10 +52,31 @@ export default async function LeaderBoard() {
 						{sorted.map((player, index) => {
 							return (
 								<tr
-									className="even:bg-zinc-700 first-of-type:bg-yellow-600"
+									className={`${
+										index == 0
+											? "bg-[#fca311] text-black font-semibold"
+											: index == 1
+											? "!bg-[#415a77] "
+											: index == 2
+											? "bg-[#8a5a44]"
+											: "even:bg-zinc-700"
+									}`}
 									key={player.id}
 								>
-									<td className="p-4 px-8">{index + 1}</td>
+									<td className="p-4 px-8 relative">
+										{index < 3 && (
+											<span className="absolute left-[-20%] top-2 bg-gray-900 text-xl bg-opacity-70 rounded-full p-2 backdrop-blur-md">
+												{index === 0
+													? "🥇"
+													: index === 1
+													? "🥈"
+													: index === 2
+													? "🥉"
+													: " "}{" "}
+											</span>
+										)}
+										{index + 1}
+									</td>
 									<td className="p-4">{player.roll}</td>
 									<td className="p-4">{player.name}</td>
 									<td align="left" className="p-4">

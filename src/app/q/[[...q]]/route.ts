@@ -1,4 +1,5 @@
 import { decryptCryptoBase64 } from "@/lib/encryption";
+import { get } from "@vercel/edge-config";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
@@ -19,7 +20,16 @@ export async function GET(request: NextRequest) {
 		redirect(`/q/${data.qs[1]}`);
 	}
 
-	const p = path.resolve("src/questions/", reqQues + ".html");
+	const curSession = await get("session");
+	if (!curSession) {
+		redirect("/waiting");
+	}
+
+	const p = path.resolve(
+		"src/questions/",
+		curSession.toString(),
+		reqQues + ".html"
+	);
 
 	// read file contents from the file system
 	const file = fs.readFileSync(p);
