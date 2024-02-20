@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
 import fs from "node:fs";
+import path from "node:path";
 
 export async function GET(request: NextRequest) {
 	const reqQues = request.nextUrl.pathname.split("/").pop();
@@ -18,8 +19,10 @@ export async function GET(request: NextRequest) {
 		redirect(`/q/${data.qs[1]}`);
 	}
 
+	const p = path.resolve("src/questions/", reqQues + ".html");
+
 	// read file contents from the file system
-	const file = fs.readFileSync("src/questions/" + reqQues + ".html");
+	const file = fs.readFileSync(p);
 	const html = file.toString();
 	// add extra links to html
 	const htmlWithLinks = html.replace(

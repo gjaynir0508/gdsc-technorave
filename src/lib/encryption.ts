@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "path";
 
 // encrypt and decrypt using a symmetric key algorithm
 async function generateKey() {
@@ -13,7 +14,8 @@ async function generateKey() {
 
 	// save the key by writing to a file
 	const exported = await crypto.subtle.exportKey("jwk", key);
-	fs.writeFileSync("src/lib/key.json", JSON.stringify(exported));
+	const p = path.resolve("src/lib/key.json");
+	fs.writeFileSync(p, JSON.stringify(exported));
 
 	return key;
 }
@@ -21,8 +23,9 @@ async function generateKey() {
 export async function encryptCryptoBase64(data: string) {
 	// generate key if not existing
 	let key;
-	if (fs.existsSync("src/lib/key.json")) {
-		const keyData = fs.readFileSync("src/lib/key.json").toString();
+	const p = path.resolve("src/lib/key.json");
+	if (fs.existsSync(p)) {
+		const keyData = fs.readFileSync(p).toString();
 		key = await crypto.subtle.importKey(
 			"jwk",
 			JSON.parse(keyData),
@@ -57,10 +60,11 @@ export async function encryptCryptoBase64(data: string) {
 
 export async function decryptCryptoBase64(encryptedStringBase64: string) {
 	//reject if key is not present
-	if (!fs.existsSync("src/lib/key.json")) {
+	const p = path.resolve("src/lib/key.json");
+	if (!fs.existsSync(p)) {
 		throw new Error("Key not found");
 	}
-	const keyData = fs.readFileSync("src/lib/key.json").toString();
+	const keyData = fs.readFileSync(p).toString();
 	const key = await crypto.subtle.importKey(
 		"jwk",
 		JSON.parse(keyData),
