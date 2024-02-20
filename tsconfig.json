@@ -26,7 +26,8 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"src/lib/validate.js"
+		"src/lib/validate.js",
+		"src/lib/sqlTest.mjs"
 	],
 	"exclude": ["node_modules"]
 }

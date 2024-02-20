@@ -1,27 +1,21 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { allocate } from "./allocate";
-import { registerPlayer } from "./players";
 import { redirect } from "next/navigation";
 import { encryptCryptoBase64 } from "./encryption";
+import { addNewPlayer } from "./sql";
 
 export async function register(formdata: FormData) {
 	const name = formdata.get("name");
-	const roll = formdata.get("roll");
+	const rollStr = formdata.get("roll");
 
-	let index: number;
-	try {
-		index = registerPlayer(Number(roll));
-		console.log(
-			`Registered ${name} with roll number ${roll} at index ${index}`
-		);
-	} catch (e) {
-		console.error(e);
+	if (typeof name !== "string" || typeof rollStr !== "string") {
 		redirect("/");
 	}
 
-	const qs = allocate(index);
+	const roll = parseInt(rollStr, 10);
+
+	const qs = await addNewPlayer(roll, name);
 
 	const data = {
 		name,
@@ -33,7 +27,7 @@ export async function register(formdata: FormData) {
 		JSON.stringify(data)
 	);
 
-	cookies().set("data", encryptedStringBase64);
+	cookies().set("data", encryptedStringBase64, { maxAge: 60 * 60 });
 
 	return redirect(`/q/${qs[1]}`);
 }

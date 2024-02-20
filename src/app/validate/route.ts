@@ -1,5 +1,6 @@
 import { decryptCryptoBase64 } from "@/lib/encryption";
-import { validate } from "@/lib/validate";
+import { validatePasscode } from "@/lib/sql";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
@@ -20,13 +21,15 @@ export async function POST(request: NextRequest) {
 	const qs = parsed.qs;
 	const index = qs[0];
 
-	const res = validate(passcode, index);
+	const res = await validatePasscode(index, passcode);
 	if (res === "Invalid ID") {
-		redirect("/");
 		request.cookies.delete("data");
+		redirect("/");
 	} else if (res === "Invalid passcode") {
 		redirect(`/q/${qs[3]}`);
 	} else {
+		revalidatePath("/leaderboard");
+		request.cookies.delete("data");
 		redirect(`/success`);
 	}
 }

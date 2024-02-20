@@ -42,6 +42,7 @@ export default function Home() {
 							name="name"
 							placeholder="Enter your name"
 							autoComplete="no"
+							required
 							className="p-unit-sm rounded-sm text-gray-900 outline-none focus:ring-4 focus:ring-blue-500"
 						/>
 						<input
@@ -49,6 +50,7 @@ export default function Home() {
 							name="roll"
 							placeholder="Enter your full roll number"
 							autoComplete="no"
+							required
 							className="p-unit-sm rounded-sm text-gray-900 outline-none focus:ring-4 focus:ring-blue-500"
 						/>
 						<button
