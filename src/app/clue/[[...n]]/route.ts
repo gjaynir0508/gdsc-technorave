@@ -1,15 +1,32 @@
 import { decryptCryptoBase64 } from "@/lib/encryption";
+import { get } from "@vercel/edge-config";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
+	const session = await get("session");
+	if (!session) {
+		cookies().delete("data");
+		redirect("/waiting");
+	}
+
 	const data = request.cookies.get("data");
 	if (!data) {
 		redirect("/");
 	}
 
-	const decrypted = await decryptCryptoBase64(data.value);
-	const parsed = JSON.parse(decrypted);
+	let parsed;
+	try {
+		const decrypted = await decryptCryptoBase64(data.value);
+		parsed = JSON.parse(decrypted);
+	} catch (e) {
+		console.log("Here, deleting cookie...");
+		await cookies().delete("data");
+		revalidatePath("/");
+		redirect("/");
+	}
 	const qs = parsed.qs;
 	const iStr = request.nextUrl.pathname.split("/").pop();
 	try {

@@ -13,16 +13,24 @@ export async function GET(request: NextRequest) {
 	if (!cookie) {
 		redirect("/");
 	}
-	// decrypt the cookie
-	const decrypted = await decryptCryptoBase64(cookie.value);
-	const data = JSON.parse(decrypted);
-	if (!data.qs.slice(1).includes(reqQues)) {
-		redirect(`/q/${data.qs[1]}`);
-	}
 
 	const curSession = await get("session");
 	if (!curSession) {
+		request.cookies.delete("data");
 		redirect("/waiting");
+	}
+
+	// decrypt the cookie
+	let data;
+	try {
+		const decrypted = await decryptCryptoBase64(cookie.value);
+		data = JSON.parse(decrypted);
+		if (!data.qs.slice(1).includes(reqQues)) {
+			redirect(`/q/${data.qs[1]}`);
+		}
+	} catch (e) {
+		request.cookies.delete("data");
+		redirect("/");
 	}
 
 	const p = path.resolve(

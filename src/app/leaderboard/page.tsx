@@ -1,6 +1,8 @@
 import React from "react";
 import { sql } from "@vercel/postgres";
 import { unstable_noStore } from "next/cache";
+import { get } from "@vercel/edge-config";
+import { redirect } from "next/navigation";
 
 function msToTime(duration: number) {
 	let milliseconds: number | string = Math.floor((duration % 1000) / 100),
@@ -23,8 +25,13 @@ export const metadata = {
 
 export default async function LeaderBoard() {
 	unstable_noStore();
+	const session = await get("session");
+	if (!session) {
+		redirect("/waiting");
+	}
 	const data =
 		await sql`SELECT id, roll, name, starttime, endtime FROM s1 WHERE length(endtime) > 0`;
+	console.log("reached here");
 	const sorted = data.rows.sort((a, b) => {
 		return (
 			new Date(a.endtime).getTime() -
@@ -38,16 +45,18 @@ export default async function LeaderBoard() {
 			<div>
 				<h1 className="text-3xl font-bold mb-8">🏆 LeaderBoard</h1>
 				<table className="bg-stone-800 bg-opacity-40">
-					<tr className="bg-stone-800 border-b-2 border-b-orange-300">
-						<th align="left" className="p-4 px-8">
-							#Rank
-						</th>
-						<th className="p-4">Roll</th>
-						<th className="p-4">Name</th>
-						<th align="left" className="p-4">
-							Time
-						</th>
-					</tr>
+					<thead>
+						<tr className="bg-stone-800 border-b-2 border-b-orange-300">
+							<th align="left" className="p-4 px-8">
+								#Rank
+							</th>
+							<th className="p-4">Roll</th>
+							<th className="p-4">Name</th>
+							<th align="left" className="p-4">
+								Time
+							</th>
+						</tr>
+					</thead>
 					<tbody>
 						{sorted.map((player, index) => {
 							return (

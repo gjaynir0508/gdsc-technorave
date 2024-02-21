@@ -1,6 +1,6 @@
 import combinations from "@/lib/combinations.json" with {type: "json"};
 import passcodes from "@/lib/passcodes.json" with {type: "json"};
-import { sql } from "@vercel/postgres";
+import { db, sql } from "@vercel/postgres";
 
 export async function pushQuestions() {
     const starttime = new Date().toISOString();
@@ -15,6 +15,8 @@ export async function deleteQuestions() {
 }
 
 export async function addNewPlayer(roll:number, name:string) {
+    const client = await db.connect();
+    const sql = client.sql;
     await sql`BEGIN`;
     const registered = await sql`SELECT roll FROM s1 WHERE roll = ${roll}`;
     if (registered.rowCount > 0) {
@@ -27,10 +29,13 @@ export async function addNewPlayer(roll:number, name:string) {
     await sql`UPDATE s1 SET roll = ${roll}, name = ${name} WHERE id = ${curLen}`;
     const q = qRes.rows[0];
     await sql`COMMIT`;
+    client.release();
     return [parseInt(q.id), q.clue1, q.clue2, q.clue3];
 }
 
 export async function validatePasscode(id:number, passcode:string) {
+    const client = await db.connect();
+    const sql = client.sql;
     await sql`BEGIN`;
     const res = await sql`SELECT passcode FROM s1 WHERE id = ${id}`;
     if (res.rowCount === 0) {
@@ -43,5 +48,6 @@ export async function validatePasscode(id:number, passcode:string) {
         return "Valid passcode";
     }
     await sql`ROLLBACK`;
+    client.release();
     return "Invalid passcode";
 }
