@@ -14,13 +14,14 @@ export async function POST(request: NextRequest) {
 	const session = await get("session");
 	if (!session) {
 		cookies().delete("data");
+		await new Promise((resolve) => () => setTimeout(resolve, 200));
 		redirect("/waiting");
 	}
 
 	const body = await request.formData();
-	const part1 = body.get("part1");
-	const part2 = body.get("part2");
-	const part3 = body.get("part3");
+	const part1 = body.get("part1")?.toString().trim().toLowerCase();
+	const part2 = body.get("part2")?.toString().trim().toLowerCase();
+	const part3 = body.get("part3")?.toString().trim().toLowerCase();
 
 	if (!part1 || !part2 || !part3) {
 		redirect("/clue/3");
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
 		parsed = JSON.parse(decrypted);
 	} catch (e) {
 		cookies().delete("data");
+		await new Promise((resolve) => () => setTimeout(resolve, 200));
 		redirect("/");
 	}
 	const qs = parsed.qs;
@@ -50,6 +52,9 @@ export async function POST(request: NextRequest) {
 		redirect("/");
 	} else if (res === "Invalid passcode") {
 		redirect(`/q/${qs[3]}`);
+	} else if (res === "Already ended") {
+		cookies().delete("data");
+		redirect("/success");
 	} else {
 		revalidatePath("/leaderboard");
 		cookies().delete("data");

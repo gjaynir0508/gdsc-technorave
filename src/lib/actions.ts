@@ -9,6 +9,9 @@ export async function register(formdata: FormData) {
 	const name = formdata.get("name");
 	const rollStr = formdata.get("roll");
 
+	cookies().delete("data");
+	cookies().delete("success");
+
 	if (typeof name !== "string" || typeof rollStr !== "string") {
 		redirect("/");
 	}

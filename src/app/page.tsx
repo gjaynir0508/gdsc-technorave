@@ -12,6 +12,11 @@ export default async function Home() {
 		redirect("/waiting");
 	}
 
+	const allowNew = await get("allowNew");
+	if (allowNew?.toString() !== "true") {
+		redirect("/waiting");
+	}
+
 	return (
 		<main className="grid w-screen h-screen place-items-center bg-gradient-to-tr bg-gray-700 from-cyan-500 to-blue-500 bg-blend-multiply">
 			{loggedIn ? (

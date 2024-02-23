@@ -31,7 +31,6 @@ export default async function LeaderBoard() {
 	}
 	const data =
 		await sql`SELECT id, roll, name, starttime, endtime FROM s1 WHERE length(endtime) > 0`;
-	console.log("reached here");
 	const sorted = data.rows.sort((a, b) => {
 		return (
 			new Date(a.endtime).getTime() -
@@ -41,11 +40,14 @@ export default async function LeaderBoard() {
 	});
 
 	return (
-		<main className="grid place-items-center h-screen p-32">
+		<main className="grid place-items-center h-screen p-32 overflow-x-hidden bg-gradient-radial from-slate-800 to-slate-900">
 			<div>
-				<h1 className="text-3xl font-bold mb-8">🏆 LeaderBoard</h1>
+				<h1 className="text-3xl font-bold p-8 sticky top-6 z-20">
+					🏆 LeaderBoard
+				</h1>
+				<div className="fixed top-0 left-[50%] translate-x-[-50%] w-[50rem] h-[17.6rem] bg-gradient-radial from-[#1a2537] to-[#172133] bg-bottom z-10"></div>
 				<table className="bg-stone-800 bg-opacity-40">
-					<thead>
+					<thead className="sticky top-[6.3rem] z-20 bg-black w-full">
 						<tr className="bg-stone-800 border-b-2 border-b-orange-300">
 							<th align="left" className="p-4 px-8">
 								#Rank

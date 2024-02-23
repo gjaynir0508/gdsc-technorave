@@ -15,7 +15,7 @@ export default function Error({
 	return (
 		<main className="bg-red-200 bg-opacity-25 h-screen grid place-items-center">
 			<div className="flex flex-col gap-4 justify-end">
-				<h2 className="text-3xl text-bold">
+				<h2 className="text-3xl font-bold">
 					⚠️ Uh Oh! An Error Occurred.
 				</h2>
 				<div className="flex gap-4">

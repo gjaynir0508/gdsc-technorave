@@ -1,6 +1,7 @@
 import combinations from "@/lib/combinations.json" with {type: "json"};
 import passcodes from "@/lib/passcodes.json" with {type: "json"};
 import { db, sql } from "@vercel/postgres";
+import { redirect } from "next/navigation";
 
 export async function pushQuestions() {
     const starttime = new Date().toISOString();
@@ -16,38 +17,46 @@ export async function deleteQuestions() {
 
 export async function addNewPlayer(roll:number, name:string) {
     const client = await db.connect();
-    const sql = client.sql;
-    await sql`BEGIN`;
-    const registered = await sql`SELECT roll FROM s1 WHERE roll = ${roll}`;
+    await client.sql`BEGIN;`;
+    const registered = await client.sql`SELECT roll FROM s1 WHERE roll = ${roll};`;
     if (registered.rowCount > 0) {
-        await sql`ROLLBACK`;
-        throw new Error(`Player with roll number ${roll} already exists`);
+        await client.sql`ROLLBACK;`;
+        client.release();
+        redirect("/problem?msg=Player with this roll number already exists&sol=Please try again with a different roll number")
     }
-    const curPlayerCount = await sql`SELECT COUNT(roll) FROM s1`;
+    const curPlayerCount = await client.sql`SELECT COUNT(roll) FROM s1;`;
     const curLen = curPlayerCount.rows[0].count;
-    const qRes = await sql`SELECT id, clue1, clue2, clue3 FROM s1 WHERE id = ${curLen}`;
-    await sql`UPDATE s1 SET roll = ${roll}, name = ${name} WHERE id = ${curLen}`;
+    const qRes = await client.sql`SELECT id, clue1, clue2, clue3 FROM s1 WHERE id = ${curLen};`;
+    await client.sql`UPDATE s1 SET roll = ${roll}, name = ${name}, status = 'started' WHERE id = ${curLen};`;
     const q = qRes.rows[0];
-    await sql`COMMIT`;
+    await client.sql`COMMIT;`;
     client.release();
     return [parseInt(q.id), q.clue1, q.clue2, q.clue3];
 }
 
 export async function validatePasscode(id:number, passcode:string) {
     const client = await db.connect();
-    const sql = client.sql;
-    await sql`BEGIN`;
-    const res = await sql`SELECT passcode FROM s1 WHERE id = ${id}`;
+    await client.sql`BEGIN;`;
+    const res = await client.sql`SELECT passcode FROM s1 WHERE id = ${id};`;
     if (res.rowCount === 0) {
-        await sql`ROLLBACK`;
+        await client.sql`ROLLBACK;`;
+        client.release();
         return "Invalid ID";
     }
+    const alreadyEnded = await client.sql`SELECT endtime FROM s1 WHERE id = ${id};`;
+    if (alreadyEnded.rows[0].status === "complete") {
+        await client.sql`ROLLBACK;`;
+        client.release();
+        return "Already ended";
+    }
+    
     if (res.rows[0].passcode === passcode) {
-        sql`UPDATE s1 SET endtime = ${new Date().toISOString()} WHERE id = ${id}`
-        await sql`COMMIT`;
+        client.sql`UPDATE s1 SET endtime = ${new Date().toISOString()}, status='complete' WHERE id = ${id};`
+        await client.sql`COMMIT;`;
+        client.release();
         return "Valid passcode";
     }
-    await sql`ROLLBACK`;
+    await client.sql`ROLLBACK;`;
     client.release();
     return "Invalid passcode";
 }

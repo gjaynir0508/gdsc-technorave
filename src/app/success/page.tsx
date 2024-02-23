@@ -18,7 +18,7 @@ export default async function Success() {
 	const success = cookies().get("success")?.value || "";
 	if (!success || success !== "true") {
 		return (
-			<main className="grid h-screen place-items-center">
+			<main className="grid h-screen place-items-center bg-[url('/confetti-40.webp')]">
 				<div>
 					<h1 className="text-4xl mb-4">
 						Well tried, but you are not supposed to be here

@@ -5,8 +5,13 @@ import React from "react";
 
 export default async function Waiting() {
 	unstable_noStore();
+	const allowNew = await get("allowNew");
 	const curSession = await get("session");
-	if (curSession && curSession.toString() !== "") {
+	if (
+		curSession &&
+		curSession.toString() !== "" &&
+		allowNew?.toString() === "true"
+	) {
 		redirect("/");
 	}
 
