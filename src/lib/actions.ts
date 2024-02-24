@@ -4,16 +4,41 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { encryptCryptoBase64 } from "./encryption";
 import { addNewPlayer } from "./sql";
+import { get } from "@vercel/edge-config";
 
 export async function register(formdata: FormData) {
 	const name = formdata.get("name");
 	const rollStr = formdata.get("roll");
+	const passcode = formdata.get("passcode");
+
+	const curSession = await get("session");
+	const allowNew = await get("allowNew");
+	const passkey = await get("passkey");
+
+	if (
+		!curSession ||
+		!passkey ||
+		!allowNew ||
+		allowNew.toString() !== "true"
+	) {
+		redirect("/waiting");
+	}
 
 	cookies().delete("data");
 	cookies().delete("success");
 
-	if (typeof name !== "string" || typeof rollStr !== "string") {
+	if (
+		typeof name !== "string" ||
+		typeof rollStr !== "string" ||
+		typeof passcode !== "string"
+	) {
 		redirect("/");
+	}
+
+	if (passcode !== passkey.toString().trim()) {
+		redirect(
+			"/problem?msg=Invalid passcode&sol=Please try again with the correct passcode"
+		);
 	}
 
 	const roll = parseInt(rollStr, 10);
@@ -24,6 +49,7 @@ export async function register(formdata: FormData) {
 		name,
 		roll,
 		qs,
+		s: curSession?.toString(),
 	};
 
 	const encryptedStringBase64 = await encryptCryptoBase64(

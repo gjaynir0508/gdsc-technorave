@@ -22,7 +22,7 @@ export async function addNewPlayer(roll:number, name:string) {
     if (registered.rowCount > 0) {
         await client.sql`ROLLBACK;`;
         client.release();
-        redirect("/problem?msg=Player with this roll number already exists&sol=Please try again with a different roll number")
+        redirect(`/problem?msg=Player with this roll number (${roll}) already exists. We do not permit same person to attempt twice.&sol=Please try again with a different roll number`)
     }
     const curPlayerCount = await client.sql`SELECT COUNT(roll) FROM s1;`;
     const curLen = curPlayerCount.rows[0].count;
