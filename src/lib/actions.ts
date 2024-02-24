@@ -9,7 +9,7 @@ import { get } from "@vercel/edge-config";
 export async function register(formdata: FormData) {
 	const name = formdata.get("name");
 	const rollStr = formdata.get("roll");
-	const passcode = formdata.get("passcode");
+	const passcode = formdata.get("passkey");
 
 	const curSession = await get("session");
 	const allowNew = await get("allowNew");

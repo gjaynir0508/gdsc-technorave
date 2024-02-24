@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Riddle Website</title>
+		<style>
+			/* Styles for the popup */
+			.popup {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				background-color: #ffffff;
+				padding: 20px;
+				border: 2px solid #ffffff;
+				border-radius: 10px;
+				box-shadow: 0 0 10px rgb(248, 248, 248);
+				z-index: 9999;
+			}
+
+			/* Styles for the input field */
+			input[type="text"] {
+				width: 100%;
+				padding: 10px;
+				margin: 10px 0;
+				box-sizing: border-box;
+			}
+
+			/* Styles to center text */
+			.center {
+				text-align: center;
+			}
+
+			/* Styles for the blurred image */
+			#blurred-image {
+				position: center;
+				top: 0;
+				left: 0;
+				width: 50%;
+				height: 100%;
+				background-image: url("hint2.jpeg");
+				background-size: cover;
+				filter: blur(10px);
+				z-index: 9998;
+			}
+
+			/* Styles for the second question */
+			#second-question {
+				display: none; /* Initially hidden */
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				color: #ffffff; /* Text color same as background */
+				z-index: 9999;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Blurred image covering half the page -->
+		<div
+			id="blurred-image"
+			src="/hint2.jpeg"
+			alt="Hint"
+			width="150"
+			height="120"
+		></div>
+
+		<ruby style="padding: 32px">
+			並べる <rp>(</rp><rt>GDSC</rt><rp>)</rp>
+		</ruby>
+
+		<!-- Popup to ask the first riddle -->
+		<div id="popup" class="popup">
+			<p class="center">I'm your “waiter” for information. What am I?</p>
+			<input
+				type="text"
+				id="answerInput"
+				placeholder="Enter your answer..."
+			/>
+			<button onclick="checkAnswer()">Submit</button>
+		</div>
+
+		<!-- Second question (initially hidden) -->
+		<div id="second-question" class="center">
+			<h2>
+				What describes the CSS properties for manipulating the “ruby”
+				position, that are small annotations next to or on top of words,
+				especially common in Japanese and Chinese? One of them is:
+				<pre>ruby-_ _ _ _ _</pre>
+			</h2>
+		</div>
+
+		<!-- Script to check the answer and display the second question -->
+		<script>
+			function checkAnswer() {
+				var answer = document
+					.getElementById("answerInput")
+					.value.toLowerCase();
+				if (answer === "server") {
+					displaySecondQuestion();
+				} else {
+					alert("Incorrect answer. Please try again.");
+				}
+			}
+
+			function displaySecondQuestion() {
+				// Remove the popup
+				var popup = document.getElementById("popup");
+				popup.style.display = "none";
+
+				// Display the blurred image covering half the page
+				var blurredImage = document.getElementById("blurred-image");
+				blurredImage.style.display = "block";
+
+				// Display the second question with hidden text
+				var secondQuestion = document.getElementById("second-question");
+				secondQuestion.style.display = "block";
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>FIND ME !!!</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f0f0f0;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+			}
+			.container {
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+				text-align: center;
+			}
+			input[type="text"] {
+				width: 100%;
+				padding: 10px;
+				margin-bottom: 10px;
+				box-sizing: border-box;
+			}
+			button {
+				padding: 10px 20px;
+				background-color: #007bff;
+				color: #fff;
+				border: none;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: #0056b3;
+			}
+			p {
+				font-size: 18px;
+				font-weight: bold;
+			}
+			.fun-text {
+				font-size: 24px;
+				margin-top: 20px;
+			}
+			.ans-bg {
+				background-image: url("/cookie_meme.png");
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+			#result-image {
+				display: none;
+			}
+			.congrats {
+				color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container" id="container">
+			<h2>dppjlf otufsnp</h2>
+			<h3>Think you can find me? I'm the mystery in plain sight</h3>
+			<input type="text" id="input" placeholder="Enter the answer" />
+			<button onclick="checkAnswer()">Check Answer</button>
+			<p id="result-text" class="fun-text"></p>
+			<img src="" id="result-image" alt="" />
+		</div>
+
+		<script>
+			async function checkAnswer() {
+				var input = document
+					.getElementById("input")
+					.value.trim()
+					.toLowerCase();
+
+				var container = document.getElementById("container");
+				var resultText = document.getElementById("result-text");
+				var resultImage = document.getElementById("result-image");
+
+				async function digestMessage(message) {
+					const msgUint8 = new TextEncoder().encode(message); // encode as (utf-8) Uint8Array
+					const hashBuffer = await crypto.subtle.digest(
+						"SHA-256",
+						msgUint8
+					); // hash the message
+					const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
+					const hashHex = hashArray
+						.map((b) => b.toString(16).padStart(2, "0"))
+						.join(""); // convert bytes to hex string
+					return hashHex;
+				}
+
+				const inputHash = await digestMessage(input);
+
+				if (
+					inputHash ===
+					"edde95b5db6b045c92dd37e80f1ece6a7fa17346fa109bf4a44b51a375feb0ba"
+				) {
+					resultText.textContent =
+						"Congratulations! You found the mystery! Okeyy dookey your key is: last seven characters of the correct input you entered.";
+					resultText.classList.add("congrats");
+					document.body.classList.add("ans-bg");
+					resultImage.style.display = "none";
+				} else {
+					resultText.textContent =
+						"Try again! The mystery is still hidden.";
+					resultText.classList.remove("congrats");
+					document.body.classList.remove("ans-bg");
+					resultImage.src =
+						"https://media.giphy.com/media/vwXz5mI7Qsjy3YrRM9/giphy.gif";
+					resultImage.style.display = "block";
+				}
+			}
+		</script>
+	</body>
+</html>

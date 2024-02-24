@@ -1,5 +1,6 @@
 import { decryptCryptoBase64 } from "@/lib/encryption";
 import { get } from "@vercel/edge-config";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
@@ -9,14 +10,14 @@ import path from "node:path";
 export async function GET(request: NextRequest) {
 	const reqQues = request.nextUrl.pathname.split("/").pop();
 	// read the cookie
-	const cookie = request.cookies.get("data");
+	const cookie = cookies().get("data");
 	if (!cookie) {
 		redirect("/");
 	}
 
 	const curSession = await get("session");
 	if (!curSession) {
-		request.cookies.delete("data");
+		cookies().delete("data");
 		redirect("/waiting");
 	}
 
@@ -29,7 +30,12 @@ export async function GET(request: NextRequest) {
 			redirect(`/q/${data.qs[1]}`);
 		}
 	} catch (e) {
-		request.cookies.delete("data");
+		cookies().delete("data");
+		redirect("/");
+	}
+
+	if (curSession.toString() !== data.s) {
+		cookies().delete("data");
 		redirect("/");
 	}
 
@@ -47,6 +53,9 @@ export async function GET(request: NextRequest) {
 		"</body>",
 		`<footer>
 		<style>
+		footer {
+			padding-bottom: 120px;
+		}
 		footer div {
 			position: fixed;
 			bottom: 32px;
@@ -77,7 +86,7 @@ export async function GET(request: NextRequest) {
 		}
 
 		.answer-form {
-			position: absolute;
+			position: fixed;
 			bottom: 0px;
 			right: 50%;
 			transform: translateX(50%);
@@ -118,6 +127,12 @@ export async function GET(request: NextRequest) {
 		.answer-form button:hover {
 			background-color: #21867a;
 		}
+
+		.answer-form buttion:disabled {
+			background-color: #d7ebe8;
+			color: #666;
+			cursor: not-allowed;
+		}
 		</style>
 		<div>
 			<a class="link" href="/q/${data.qs[1]}">Clue 1</a>
@@ -129,7 +144,7 @@ export async function GET(request: NextRequest) {
 				? `
 			<form class="answer-form" action="/validate" method="post">
 				<input type="text" name="part1" placeholder="part1" required>-<input type="text" name="part2" placeholder="part2" required>-<input type="text" name="part3" placeholder="part3" required>
-				<button type="submit" onclick="">Verify</button>
+				<button type="submit">Verify</button>
 			</form>
 			`
 				: ""

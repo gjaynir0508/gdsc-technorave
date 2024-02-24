@@ -37,6 +37,7 @@ export default async function Success() {
 		<main className="grid h-screen place-items-center">
 			<div>
 				<h1 className="text-4xl">Success! You have cracked it!</h1>
+				<h2 className="text-2xl">Inform a coordinator/organizer.</h2>
 				<Link
 					className="text-yellow-400 underline underline-offset-4"
 					href="/leaderboard"

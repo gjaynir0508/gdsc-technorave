@@ -6,7 +6,9 @@ import { redirect } from "next/navigation";
 import SubmitBtn from "./SubmitBtn";
 
 export default async function Home() {
-	const loggedIn = cookies().get("data") !== undefined;
+	const loggedIn =
+		cookies().get("data") !== undefined &&
+		cookies().get("data")?.value.toString() !== "";
 	const curSession = await get("session");
 	if (!curSession) {
 		redirect("/waiting");
@@ -64,9 +66,17 @@ export default async function Home() {
 							className="p-unit-sm rounded-sm text-gray-900 outline-none focus:ring-4 focus:ring-blue-500"
 						/>
 						<input
-							type="nmber"
+							type="number"
 							name="roll"
 							placeholder="Enter your full roll number"
+							autoComplete="off"
+							required
+							className="p-unit-sm rounded-sm text-gray-900 outline-none focus:ring-4 focus:ring-blue-500"
+						/>
+						<input
+							type="text"
+							name="passkey"
+							placeholder="Passkey for session"
 							autoComplete="off"
 							required
 							className="p-unit-sm rounded-sm text-gray-900 outline-none focus:ring-4 focus:ring-blue-500"
