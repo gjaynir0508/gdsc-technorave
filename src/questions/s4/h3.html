@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DIGITAL ODESSEY</title>
+		<style>
+			body {
+				background-color: black;
+				color: #ffff00; /* yellow */
+				font-family: Arial, sans-serif;
+				background-image: url("https://t4.ftcdn.net/jpg/04/09/86/15/360_F_409861532_l6vKbJSMetiiBt62XclpiKRvO7LZ7hCj.jpg");
+				background-size: cover;
+			}
+			.container {
+				text-align: center;
+				padding: 50px;
+				color: #cfe2ff;
+			}
+			input[type="text"] {
+				width: 200px;
+				padding: 10px;
+				margin: 10px;
+				border-radius: 5px;
+				border: 1px solid #ccc;
+				box-sizing: border-box;
+				text-align: center;
+			}
+			input[type="submit"] {
+				padding: 10px 20px;
+				background-color: #004c8c; /* Dark blue */
+				border: none;
+				border-radius: 20px;
+				color: white;
+				cursor: pointer;
+			}
+			.code-snippet {
+				font-size: 8pt;
+				display: grid;
+				place-items: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<img
+				src="https://media.licdn.com/dms/image/D4E03AQFWNgn2KNrxeA/profile-displayphoto-shrink_800_800/0/1692545918729?e=2147483647&v=beta&t=hf0m5ck2zz62Nu9PIqM5GwCzpXOHpnlCuk3d9OmViYs"
+				width="100"
+				height="100"
+			/>
+			<h2>Find the bug</h2>
+			<div class="code-snippet">
+				<pre style="text-align: left"><code>
+# This code is intended to print the squares of numbers from 1 to 5
+
+squares = []
+for i in range(1, 6):
+    square = i * i
+    squares.append(square)
+
+# Print the squares
+print("The squares of numbers from 1 to 5 are:")
+for i in range(len(squares)):
+    print(i, ":", squares[i])
+
+
+OUTPUT:
+The squares of numbers from 1 to 5 are:
+0 : 1
+1 : 4
+2 : 9
+3 : 16
+4 : 25
+(wrong answer!)
+
+
+</code></pre>
+			</div>
+
+			<p>
+				The answer is corrected expression in letters, no spaces eg: k *
+				3 => ktimesthree
+			</p>
+		</div>
+		<script>
+			document
+				.querySelector("form")
+				.addEventListener("submit", function (event) {
+					event.preventDefault();
+					const answer = document
+						.getElementById("riddle_answer")
+						.value.toLowerCase()
+						.trim();
+					const clue = document.getElementById("result");
+					if (answer === "i+1") {
+						clue.textContent = "Congratulations! the clue is i+1";
+					} else {
+						clue.textContent = "Try again.";
+					}
+				});
+		</script>
+	</body>
+</html>

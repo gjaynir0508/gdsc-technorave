@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reveal Text on Hold (5 Buttons)</title>
+  <style>
+    .reveal-btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .hidden-text {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="reveal-btn">Button 1</button>
+  <span class="hidden-text">TWFudWFsIGlzIHRoZSBhbnN3ZXI=</span>
+  <button class="reveal-btn">Button 2</button>
+  <span class="hidden-text">V29ya2luZyBpcyB0aGUgYW5zd2Vy</span>
+  <button class="reveal-btn">Button 3</button>
+  <span class="hidden-text">UGVyc29uIGlzIHRoZSBhbnN3ZXI=</span>
+  <button class="reveal-btn">Button 4</button>
+  <span class="hidden-text">Zmx1dHRlciBpcyB0aGUgYW5zd2Vy</span>
+  <button class="reveal-btn">Button 5</button>
+  <span class="hidden-text">SGVsbG8gaXMgdGhlIGFuc3dlcg==</span>
+  <button class="reveal-btn">Button 6</button>
+  <span class="hidden-text">TmV2ZXIgaXMgdGhlIGFuc3dlcg==</span>
+  <button class="reveal-btn">Button 7</button>
+  <span class="hidden-text">U3RyaW5nIGlzIHRoZSBhbnN3ZXI=</span>
+  <button class="reveal-btn">Button 8</button>
+  <span class="hidden-text">UGVyc29uIGlzIHRoZSBhbnN3ZXI=</span>
+  <button class="reveal-btn">Button 9</button>
+  <span class="hidden-text">V29ya2luZyBpcyB0aGUgYW5zd2Vy</span>
+
+<!-- https://www.base64encode.org/ - :) -->
+
+
+  <script>
+    const revealBtns = document.querySelectorAll('.reveal-btn');
+    const hiddenTexts = document.querySelectorAll('.hidden-text');
+
+    function handleHold(btn, text) {
+      let isHolding = false;
+
+      btn.addEventListener('mousedown', () => {
+        isHolding = true;
+        text.style.display = 'block';
+      });
+
+      btn.addEventListener('mouseup', () => {
+        isHolding = false;
+        text.style.display = 'none';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isHolding) {
+          isHolding = false;
+          text.style.display = 'none';
+        }
+      });
+    }
+
+    revealBtns.forEach((btn, index) => {
+      handleHold(btn, hiddenTexts[index]);
+    });
+  </script>
+</body>
+</html>

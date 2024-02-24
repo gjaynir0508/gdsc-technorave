@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Find the clue!!!</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f0f0f0;
+				background-image: url("https://res.cloudinary.com/startup-grind/image/upload/c_fill,dpr_2.0,f_auto,g_center,h_360,q_100,w_1140/v1/gcs/platform-data-dsc/chapter_banners/DSC%20BANNER%203.png");
+				text-align: center;
+				padding-top: 50px;
+				overflow: hidden; /* To hide overflowing content */
+			}
+			#movingText {
+				font-size: 24px;
+				position: relative;
+				white-space: nowrap; /* To prevent line breaks */
+				animation: moveText 1s linear infinite;
+			}
+			.highlight {
+				animation: changeColor 1s infinite alternate;
+			}
+			@keyframes moveText {
+				0% {
+					left: 100%;
+				}
+				100% {
+					left: -100%;
+				}
+			}
+			@keyframes changeColor {
+				0% {
+					color: red;
+				}
+				100% {
+					color: blue;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Find the clue!!!</h1>
+		<div id="movingText">
+			G<span>O</span>O<span class="highlight">G</span>L<span>E</span>
+			DE<span class="highlight">V</span>ELOPERS STU<span class="highlight"
+				>D</span
+			>ENT C<span class="highlight">L</span>UB
+		</div>
+		<br />
+	</body>
+</html>

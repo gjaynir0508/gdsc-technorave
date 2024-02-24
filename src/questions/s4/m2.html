@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treasure Hunt!</title>
+  <style>
+    body {
+      font-family: Comic Sans MS;
+      text-align: center;
+    }
+    .container {
+      width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .instructions {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .clue {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .treasure {
+      display: none;
+      font-size: 24px;
+      font-weight: bold;
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Treasure Hunt!</h1>
+    <p>
+"Press the keys in sequence, with a knowing touch, <br>
+To reveal the treasure, hidden in a clutch. <br>
+Developer tools hold the secret, hidden from view, <!-- https://www.base64encode.org/ - :) --> <br>
+Unlocking the prize, reserved just for you. <br>
+With each shortcut pressed, the path is unveiled,   <br>
+Leading to the treasure, eagerly assailed. <br>
+So remember the combination, with fingers light, <br>
+And discover the secret, hidden from sight."</p>
+<h3>Find who's loml</h3>
+    <div class="treasure">Dayumn You found the aXRzIE1vbSBvZmM=</div>
+    <script>
+      // Hide the treasure element
+const treasure = document.querySelector('.treasure');
+treasure.style.display = 'none';
+
+// Add an event listener to check for developer tools being opened
+document.addEventListener('keydown', (event) => {
+  if (event.ctrlKey && event.shiftKey && event.key === 'I') {
+    displayTreasure();
+  }
+});
+
+function displayTreasure() {
+  // You can add more complex checks here to verify if the user
+  // actually inspected the hidden element
+  treasure.style.display = 'block';
+}
+
+    </script>
+  </div>
+</body>
+</html>
