@@ -50,7 +50,7 @@ export async function addNewPlayer(roll:number, name:string) {
 export async function validatePasscode(id:number, passcode:string) {
     const client = await db.connect();
     await client.sql`BEGIN;`;
-    const res = await client.sql`SELECT id, passcode FROM s1 WHERE id = ${id};`;
+    const res = await client.sql`SELECT id, passcode, starttime FROM s1 WHERE id = ${id};`;
     if (res.rowCount === 0) {
         await client.sql`ROLLBACK;`;
         client.release();
@@ -66,7 +66,9 @@ export async function validatePasscode(id:number, passcode:string) {
     }
     
     if (res.rows[0].passcode.toLowerCase() === passcode) {
-        client.sql`UPDATE s1 SET status = 'complete', endtime = ${new Date().toISOString()} WHERE id = ${id};`
+        const endtime = new Date()
+        const starttime = new Date(res.rows[0].starttime);
+        client.sql`UPDATE s1 SET status = 'complete', endtime = ${endtime.toISOString()}, time = ${endtime.getTime() - starttime.getTime()}, progress=3, score=10 WHERE id = ${id};`
         await client.sql`COMMIT;`;
         client.release();
         return "Valid passcode";
@@ -83,6 +85,8 @@ export async function validatePasscode(id:number, passcode:string) {
     const partsDb = res.rows[0].passcode.toLowerCase().split("-");
     const [db1, db2, db3] = partsDb;
 
+    let progress = 0;
+    let score = 0;
     let correct = {
         0: false,
         1: false,
@@ -91,19 +95,27 @@ export async function validatePasscode(id:number, passcode:string) {
 
     if (part1 === db1) {
         correct[0] = true;
+        progress++;
+        score++;
     }
 
     if (part2 === db2) {
         correct[1] = true;
+        progress++;
+        score += 3;
     }
 
     if (part3 === db3) {
         correct[2] = true;
+        progress++;
+        score += 6;
     }
+
+    await client.sql`UPDATE s1 SET progress=${progress}, score=${score} WHERE id=${id};`;
 
     cookies().set("correct", JSON.stringify(correct));
 
-    await client.sql`ROLLBACK;`;
+    await client.sql`COMMIT;`;
     client.release();
     return "Invalid passcode";
 }

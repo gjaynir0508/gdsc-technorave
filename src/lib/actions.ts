@@ -5,8 +5,10 @@ import { redirect } from "next/navigation";
 import { encryptCryptoBase64 } from "./encryption";
 import { addNewPlayer } from "./sql";
 import { get } from "@vercel/edge-config";
+import { unstable_noStore } from "next/cache";
 
 export async function register(formdata: FormData) {
+	unstable_noStore();
 	const name = formdata.get("name");
 	const rollStr = formdata.get("roll");
 	const passcode = formdata.get("passkey");
@@ -21,7 +23,7 @@ export async function register(formdata: FormData) {
 		!allowNew ||
 		allowNew.toString() !== "true"
 	) {
-		redirect("/waiting");
+		redirect("/logout/clear");
 	}
 
 	cookies().delete("data");
@@ -58,7 +60,10 @@ export async function register(formdata: FormData) {
 		JSON.stringify(data)
 	);
 
-	cookies().set("data", encryptedStringBase64, { maxAge: 60 * 60 });
+	cookies().set("data", encryptedStringBase64, {
+		maxAge: 60 * 60,
+		sameSite: "strict",
+	});
 
 	return redirect(`/logout/clean`);
 }

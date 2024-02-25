@@ -1,10 +1,11 @@
 import { get } from "@vercel/edge-config";
 import { unstable_noStore } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 
 export default async function Waiting() {
-	unstable_noStore();
+	cookies();
 	const allowNew = await get("allowNew");
 	const curSession = await get("session");
 	if (

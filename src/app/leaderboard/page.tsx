@@ -30,15 +30,13 @@ export default async function LeaderBoard() {
 	if (!session) {
 		redirect("/waiting");
 	}
+
 	const data =
-		await sql`SELECT id, roll, name, starttime, endtime FROM s1 WHERE length(endtime) > 0`;
-	const sorted = data.rows.sort((a, b) => {
-		return (
-			new Date(a.endtime).getTime() -
-			new Date(a.starttime).getTime() -
-			(new Date(b.endtime).getTime() - new Date(b.starttime).getTime())
-		);
-	});
+		await sql`select id, roll, name, time, progress, score, starttime from s1 
+				where roll > 0
+				order by score desc, progress desc, time asc, starttime asc`;
+
+	const sorted = data.rows;
 
 	return (
 		<main className="grid place-items-center h-screen p-32 overflow-x-hidden bg-gradient-radial from-slate-800 to-slate-900">
@@ -58,6 +56,8 @@ export default async function LeaderBoard() {
 							<th align="left" className="p-4">
 								Time
 							</th>
+							<th className="p-4">Score (max. 10)</th>
+							<th className="p-4">Progress</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -92,12 +92,24 @@ export default async function LeaderBoard() {
 									<td className="p-4">{player.roll}</td>
 									<td className="p-4">{player.name}</td>
 									<td align="left" className="p-4">
-										{msToTime(
-											new Date(player.endtime).getTime() -
-												new Date(
-													player.starttime
-												).getTime()
-										)}
+										{player.progress === 3
+											? msToTime(parseInt(player.time))
+											: `⏱️ (${msToTime(
+													Date.now() -
+														new Date(
+															player.starttime
+														).getTime()
+											  )})`}
+									</td>
+									<td className="p-4">{player.score}</td>
+									<td className="p-4">
+										{player.progress === 3
+											? "Completed"
+											: player.progress === 2
+											? "2/3"
+											: player.progress === 1
+											? "1/3"
+											: "0/3"}
 									</td>
 								</tr>
 							);
