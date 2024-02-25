@@ -70,6 +70,7 @@ export default async function Home() {
 							name="roll"
 							placeholder="Enter your full roll number"
 							autoComplete="off"
+							pattern="[0-9]{12}"
 							required
 							className="p-unit-sm rounded-sm text-gray-900 outline-none focus:ring-4 focus:ring-blue-500"
 						/>

@@ -12,7 +12,7 @@ function Problem() {
 		redirect("/");
 	}
 	return (
-		<main className="bg-cyan-200 bg-opacity-25 h-screen grid place-items-center">
+		<main className="bg-cyan-200 bg-opacity-25 h-screen grid place-items-center px-8">
 			<div className="flex flex-col gap-4 justify-end">
 				<h2 className="text-md mb-8 italic">
 					⚠️ Uh Oh! Looks like there is a problem

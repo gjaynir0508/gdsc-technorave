@@ -3,6 +3,7 @@ import { sql } from "@vercel/postgres";
 import { unstable_noStore } from "next/cache";
 import { get } from "@vercel/edge-config";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 function msToTime(duration: number) {
 	let milliseconds: number | string = Math.floor((duration % 1000) / 100),
@@ -45,7 +46,7 @@ export default async function LeaderBoard() {
 				<h1 className="text-3xl font-bold p-8 sticky top-6 z-20">
 					🏆 LeaderBoard
 				</h1>
-				<div className="fixed top-0 left-[50%] translate-x-[-50%] w-[50rem] h-[17.6rem] bg-gradient-radial from-[#1a2537] to-[#172133] bg-bottom z-10"></div>
+				<div className="fixed top-0 left-0 w-[98vw] h-[17.6rem] bg-gradient-radial from-[#1a2537] to-[#172133] bg-bottom z-10"></div>
 				<table className="bg-stone-800 bg-opacity-40">
 					<thead className="sticky top-[6.3rem] z-20 bg-black w-full">
 						<tr className="bg-stone-800 border-b-2 border-b-orange-300">
@@ -103,6 +104,14 @@ export default async function LeaderBoard() {
 						})}
 					</tbody>
 				</table>
+			</div>
+			<div className="fixed bottom-0 right-0 p-8">
+				<Link
+					className="bg-red-700 hover:bg-red-900 text-white px-8 py-2 transition-all rounded-md"
+					href="/logout/clear"
+				>
+					Logout
+				</Link>
 			</div>
 		</main>
 	);

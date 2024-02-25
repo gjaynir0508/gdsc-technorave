@@ -26,12 +26,13 @@ export async function GET(request: NextRequest) {
 	try {
 		const decrypted = await decryptCryptoBase64(cookie.value);
 		data = JSON.parse(decrypted);
-		if (!data.qs.slice(1).includes(reqQues)) {
-			redirect(`/q/${data.qs[1]}`);
-		}
 	} catch (e) {
 		cookies().delete("data");
 		redirect("/");
+	}
+
+	if (!data.qs.slice(1).includes(reqQues)) {
+		redirect(`/q/${data.qs[1]}`);
 	}
 
 	if (curSession.toString() !== data.s) {
@@ -105,8 +106,7 @@ export async function GET(request: NextRequest) {
 			border: 1px solid #ddd;
 			outline: none;
 			min-width: 4rem;
-			width: fit-content;
-			max-width: 10rem;
+			width: 4rem;
 			font-family: monospace;
 			text-align: center;
 			font-size: 1.5rem;
@@ -133,6 +133,12 @@ export async function GET(request: NextRequest) {
 			color: #666;
 			cursor: not-allowed;
 		}
+
+		@media (max-width: 768px) {
+			.answer-form {
+				flex-direction: column;
+			}
+		}
 		</style>
 		<div>
 			<a class="link" href="/q/${data.qs[1]}">Clue 1</a>
@@ -144,12 +150,74 @@ export async function GET(request: NextRequest) {
 				? `
 			<form class="answer-form" action="/validate" method="post">
 				<input type="text" name="part1" placeholder="part1" required>-<input type="text" name="part2" placeholder="part2" required>-<input type="text" name="part3" placeholder="part3" required>
-				<button type="submit">Verify</button>
+				<button id="answer_form_sumbit" type="submit">Verify</button>
 			</form>
 			`
 				: ""
 		}
 		</footer>
+		${
+			reqQues === data.qs[3]
+				? `<script type="module">
+			const form = document.querySelector(".answer-form");
+			const btn = document.getElementById("answer_form_sumbit");
+			const inputs = document.querySelectorAll(".answer-form input");
+			
+			const correct = await cookieStore.get("correct");
+			const savedValues = localStorage.getItem("savedValues");
+
+			let values;
+			if (savedValues) {
+				values = JSON.parse(savedValues);
+				inputs.forEach((input, index) => {
+					input.value = values[index];
+					input.style.width = input.value.length + 4 + "ch";
+				});
+			}
+
+			form.addEventListener("submit", (e) => {
+				e.preventDefault();
+				btn.disabled = true;
+				btn.style.backgroundColor = "#d7ebe8";
+				btn.style.color = "#666";
+				btn.style.cursor = "not-allowed";
+				btn.innerHTML = "Verifying...";
+				const values = Array.from(inputs).map((input) => input.value);
+				localStorage.setItem("savedValues", JSON.stringify(values));
+				form.submit();
+			});
+
+			btn.addEventListener("click", () => {
+				inputs.forEach((input) => {
+					input.disabled = false;
+				});
+				const values = Array.from(inputs).map((input) => input.value);
+				localStorage.setItem("savedValues", JSON.stringify(values));
+			});
+
+			if (correct && values?.length === 3) {
+				const correctObj = JSON.parse(decodeURIComponent(correct.value));
+				inputs.forEach((input, index) => {
+					if (correctObj[index] && values[index]) {
+						input.disabled = true;
+						input.style.backgroundColor = "#d7ebe8";
+						input.style.color = "#666";
+						input.style.width = input.value.length + 4 + "ch";
+					}
+				});
+			}
+
+			inputs.forEach((input) => {
+				input.addEventListener("input", () => {
+					input.style.width = input.value.length + 4 + "ch";
+					values = Array.from(inputs).map((input) => input.value);
+					localStorage.setItem("savedValues", JSON.stringify(values));
+				});
+			});
+
+		</script>`
+				: ""
+		}
 		</body>`
 	);
 

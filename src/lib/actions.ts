@@ -26,6 +26,8 @@ export async function register(formdata: FormData) {
 
 	cookies().delete("data");
 	cookies().delete("success");
+	cookies().delete("success-msg");
+	cookies().delete("correct");
 
 	if (
 		typeof name !== "string" ||
@@ -58,5 +60,5 @@ export async function register(formdata: FormData) {
 
 	cookies().set("data", encryptedStringBase64, { maxAge: 60 * 60 });
 
-	return redirect(`/q/${qs[1]}`);
+	return redirect(`/logout/clean`);
 }

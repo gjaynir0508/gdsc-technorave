@@ -7,8 +7,7 @@ import React from "react";
 export default async function Success() {
 	const session = await get("session");
 	if (!session) {
-		cookies().delete("data");
-		redirect("/waiting");
+		redirect("/util/rc");
 	}
 
 	if (!cookies().get("success")) {
@@ -33,11 +32,18 @@ export default async function Success() {
 			</main>
 		);
 	}
+
 	return (
 		<main className="grid h-screen place-items-center">
-			<div>
-				<h1 className="text-4xl">Success! You have cracked it!</h1>
-				<h2 className="text-2xl">Inform a coordinator/organizer.</h2>
+			<div className="max-w-[45%]">
+				<h1 className="text-4xl">
+					{cookies().has("success-msg")
+						? `${cookies().get("success-msg")?.value}`
+						: "Success! You have cracked it!"}
+				</h1>
+				<h2 className="text-2xl my-8">
+					(Inform a coordinator/organizer. :)
+				</h2>
 				<Link
 					className="text-yellow-400 underline underline-offset-4"
 					href="/leaderboard"

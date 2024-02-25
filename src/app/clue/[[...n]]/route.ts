@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 		parsed = JSON.parse(decrypted);
 	} catch (e) {
 		console.log("Here, deleting cookie...");
-		await cookies().delete("data");
+		cookies().delete("data");
 		revalidatePath("/");
 		redirect("/");
 	}

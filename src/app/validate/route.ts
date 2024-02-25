@@ -52,8 +52,13 @@ export async function POST(request: NextRequest) {
 		redirect("/");
 	} else if (res === "Invalid passcode") {
 		redirect(`/q/${qs[3]}`);
-	} else if (res === "Already ended") {
+	} else if (res === "Already completed") {
 		cookies().delete("data");
+		cookies().set("success", "true");
+		cookies().set(
+			"success-msg",
+			"You have already completed the game. (This attempt was also correct :))"
+		);
 		redirect("/success");
 	} else {
 		revalidatePath("/leaderboard");
