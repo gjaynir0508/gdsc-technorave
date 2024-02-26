@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tech Memory Game</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				text-align: center;
+			}
+
+			.card-container {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 10px;
+				margin-top: 20px;
+			}
+
+			.card-row {
+				display: flex;
+				gap: 10px;
+			}
+
+			.card {
+				width: 100px;
+				height: 100px;
+				background-color: #ffffff;
+				color: #000000;
+				position: relative;
+				perspective: 1000px;
+				border-radius: 10px;
+				overflow: hidden;
+			}
+
+			.card-inner {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				transition: transform 0.3s;
+				transform-style: preserve-3d;
+			}
+
+			.card-front,
+			.card-back {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				position: absolute;
+				backface-visibility: hidden;
+				padding: 10px;
+				box-sizing: border-box;
+			}
+
+			.card-front {
+				transform: rotateY(0deg);
+			}
+
+			.card-back {
+				transform: rotateY(180deg);
+			}
+
+			.card.flipped .card-inner {
+				transform: rotateY(180deg);
+			}
+
+			.card-word {
+				font-size: 18px;
+			}
+
+			.blue {
+				background-color: #4285f4;
+				color: #ffffff;
+			}
+			.red {
+				background-color: #db4437;
+				color: #ffffff;
+			}
+			.yellow {
+				background-color: #f4b400;
+				color: #000000;
+			}
+			.green {
+				background-color: #0f9d58;
+				color: #ffffff;
+			}
+
+			.input-container {
+				margin-top: 20px;
+			}
+
+			input {
+				margin-right: 10px;
+				padding: 5px;
+			}
+
+			button {
+				padding: 5px 10px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Tech Memory Game</h1>
+		<div class="card-container" id="cardContainer"></div>
+
+		<div class="input-container">
+			<div>
+				<input type="text" id="pair1" placeholder="Enter pair 1" />
+				<input type="text" id="pair2" placeholder="Enter pair 2" />
+			</div>
+			<div>
+				<input type="text" id="pair3" placeholder="Enter pair 3" />
+				<input type="text" id="pair4" placeholder="Enter pair 4" />
+			</div>
+			<div>
+				<input type="text" id="pair5" placeholder="Enter pair 5" />
+			</div>
+			<button onclick="submitPairs()">Submit</button>
+		</div>
+
+		<script>
+			const cardContainer = document.getElementById("cardContainer");
+			let revealedCards = [];
+			let matches = 0;
+
+			const techWords = [
+				"cloud",
+				"ai",
+				"robot",
+				"google",
+				"jams",
+				"ml",
+				"data",
+				"css",
+				"html",
+				"java",
+				"python",
+				"R",
+				"?",
+				";",
+				"meta",
+				"code",
+				"git",
+				"js",
+				"C",
+				"import",
+				".py",
+				"script",
+				"api",
+				"iot",
+				"sql",
+				"cloud",
+				"google",
+				"jams",
+				"meta",
+				"ml",
+			];
+
+			techWords.sort(() => Math.random() - 0.5);
+
+			const colors = ["blue", "red", "yellow", "green"];
+			let colorIndex = 0;
+			let row = document.createElement("div");
+			row.classList.add("card-row");
+			cardContainer.appendChild(row);
+
+			techWords.forEach((word) => {
+				if (row.children.length === 5) {
+					row = document.createElement("div");
+					row.classList.add("card-row");
+					cardContainer.appendChild(row);
+					colorIndex = (colorIndex + 1) % colors.length;
+				}
+				const card = document.createElement("div");
+				card.classList.add("card", colors[colorIndex]);
+				card.addEventListener("click", () => flipCard(card));
+				const cardInner = document.createElement("div");
+				cardInner.classList.add("card-inner");
+				card.appendChild(cardInner);
+				const cardFront = document.createElement("div");
+				cardFront.classList.add("card-front");
+				cardInner.appendChild(cardFront);
+				const cardBack = document.createElement("div");
+				cardBack.classList.add("card-back");
+				cardInner.appendChild(cardBack);
+				const wordElement = document.createElement("div");
+				wordElement.classList.add("card-word");
+				wordElement.textContent = word;
+				cardBack.appendChild(wordElement);
+				row.appendChild(card);
+			});
+
+			function flipCard(card) {
+				if (revealedCards.length === 2) {
+					return;
+				}
+
+				if (!card.classList.contains("flipped")) {
+					card.classList.add("flipped");
+					revealedCards.push(card);
+
+					if (revealedCards.length === 2) {
+						const [card1, card2] = revealedCards;
+						if (
+							card1.querySelector(".card-word").textContent ===
+							card2.querySelector(".card-word").textContent
+						) {
+							matches++;
+							if (matches === 5) {
+								setTimeout(
+									() =>
+										alert(
+											"Congratulations! You found 5 matches! Now enter the pairs in the input boxes below to complete the passcode!"
+										),
+									500
+								);
+							}
+							revealedCards = [];
+						} else {
+							setTimeout(() => {
+								card1.classList.remove("flipped");
+								card2.classList.remove("flipped");
+								revealedCards = [];
+							}, 1000);
+						}
+					}
+				}
+			}
+
+			function submitPairs() {
+				const pair1 = document
+					.getElementById("pair1")
+					.value.trim()
+					.toLowerCase();
+				const pair2 = document
+					.getElementById("pair2")
+					.value.trim()
+					.toLowerCase();
+				const pair3 = document
+					.getElementById("pair3")
+					.value.trim()
+					.toLowerCase();
+				const pair4 = document
+					.getElementById("pair4")
+					.value.trim()
+					.toLowerCase();
+				const pair5 = document
+					.getElementById("pair5")
+					.value.trim()
+					.toLowerCase();
+
+				const correctPairs = [
+					techWords[0],
+					techWords[1],
+					techWords[2],
+					techWords[3],
+					techWords[4],
+				].map((word) => word.toLowerCase());
+
+				console.log(correctPairs);
+				if (
+					pair1 === correctPairs[0] &&
+					pair2 === correctPairs[1] &&
+					pair3 === correctPairs[2] &&
+					pair4 === correctPairs[3] &&
+					pair5 === correctPairs[4]
+				) {
+					alert(
+						"Congratulations! You have a sharp 'memory'! That's your final part for the passcode!"
+					);
+				} else {
+					alert("Oops! Try again!");
+				}
+			}
+		</script>
+	</body>
+</html>
+

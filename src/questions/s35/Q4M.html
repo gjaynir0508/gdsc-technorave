@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Password Protected Image</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f4f4f4;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+			}
+
+			.container {
+				text-align: center;
+			}
+
+			.image-container {
+				max-width: 400px;
+				margin: 0 auto;
+				border: 2px solid #ccc;
+				border-radius: 8px;
+				overflow: hidden;
+				margin-bottom: 20px;
+				display: none;
+			}
+
+			.image {
+				width: 100%;
+				height: auto;
+				display: block;
+			}
+
+			.form-container {
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 8px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				width: 300px;
+				margin: 0 auto;
+			}
+
+			.password-input {
+				width: calc(100% - 22px);
+				padding: 10px;
+				margin-bottom: 10px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				box-sizing: border-box;
+				font-size: 16px;
+			}
+
+			.submit-btn {
+				width: 100%;
+				padding: 10px;
+				background-color: #007bff;
+				color: #fff;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				font-size: 16px;
+				transition: background-color 0.3s;
+			}
+
+			.submit-btn:hover {
+				background-color: #0056b3;
+			}
+
+			.message {
+				margin-top: 20px;
+				display: none;
+			}
+
+			.success {
+				color: green;
+			}
+
+			.error {
+				color: red;
+			}
+
+			.show {
+				display: block !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="riddle-container">
+				<p>
+					I'm a property with flair, bringing layout to the fore,<br />
+					With values like 'flex' and 'grid,' I open many a door.<br />
+					I'll align and arrange with ease, making designs sublime,<br />
+					In rows and columns, I'll organize your digital rhyme
+				</p>
+				<form id="riddleForm">
+					<input
+						type="text"
+						id="riddleAnswer"
+						placeholder="Enter your answer"
+						class="password-input"
+						required
+					/>
+					<button type="submit" class="submit-btn">Submit</button>
+				</form>
+				<div id="riddleMessage" class="message"></div>
+			</div>
+			<div class="image-container" id="imageContainer">
+				<img src="gccphidden.png" alt="Image" class="image" />
+			</div>
+			<div
+				class="form-container"
+				id="passwordContainer"
+				style="display: none"
+			>
+				<form id="passwordForm">
+					<input
+						type="password"
+						id="password"
+						placeholder="Enter the password"
+						class="password-input"
+						required
+					/>
+					<!-- https://www.base64encode.org/ :) -->
+					<button type="submit" class="submit-btn">Submit</button>
+				</form>
+			</div>
+			<div id="passwordMessage" class="message"></div>
+			<div id="congratsMessage" class="message success">
+				<p>Congratulations! You entered the correct password.</p>
+			</div>
+		</div>
+
+		<script>
+			document
+				.getElementById("riddleForm")
+				.addEventListener("submit", function (event) {
+					event.preventDefault();
+					var riddleAnswer =
+						document.getElementById("riddleAnswer").value;
+					var riddleMessage =
+						document.getElementById("riddleMessage");
+
+					if (riddleAnswer.toLowerCase() === "display") {
+						riddleMessage.innerHTML =
+							"Correct! Now enter the password.";
+						document.querySelector(
+							".riddle-container"
+						).style.display = "none";
+						document.getElementById(
+							"passwordContainer"
+						).style.display = "block";
+						document.getElementById(
+							"imageContainer"
+						).style.display = "block";
+					} else {
+						riddleMessage.innerHTML =
+							"Oops! That's not correct. Try again.";
+					}
+				});
+
+			document
+				.getElementById("passwordForm")
+				.addEventListener("submit", function (event) {
+					event.preventDefault();
+					var password = document.getElementById("password").value;
+
+					if (btoa(password) === "Z2RzY19jYml0") {
+						const congratsMessage =
+							document.getElementById("congratsMessage");
+						document.getElementById(
+							"passwordContainer"
+						).style.display = "none";
+						congratsMessage.style.display = "block";
+						document.getElementById(
+							"passwordMessage"
+						).style.display = "none";
+						document.querySelector(
+							".image-container"
+						).style.display = "block";
+						setTimeout(() => {
+							congratsMessage.innerText =
+								"This password was the 2nd part of your passcode.";
+						}, 1000);
+					} else {
+						document.getElementById("passwordMessage").innerHTML =
+							'<p class="error">Oops! You didn\'t catch me.</p>';
+						document.getElementById(
+							"passwordMessage"
+						).style.display = "block";
+					}
+				});
+		</script>
+	</body>
+</html>
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Pattern Quiz</title>
+	</head>
+	<body>
+		<h1>Pattern Quiz</h1>
+
+		<h2>Pattern Generation</h2>
+		<p>This Python code generates a recursive pattern:</p>
+		<pre><code>
+    def generate_pattern(n):
+        if n == 0:
+            return ""
+        elif n == 1:
+            return "a"
+        elif n == 2:
+            return "b"
+        else:
+            return "a" + generate_pattern(n-1) + "c" + generate_pattern(n-1) + "b"
+
+    pattern = generate_pattern(3)
+    print(pattern)
+    </code></pre>
+
+		<h2>What's the output? That's your 2nd part of the passcode</h2>
+	</body>
+</html>
