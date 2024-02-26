@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Riddle Game</title>
+		<style>
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				background: #000;
+				color: #fff;
+				font-family: Arial, sans-serif;
+			}
+			#container {
+				text-align: center;
+			}
+			input[type="text"] {
+				padding: 10px;
+				margin-top: 20px;
+				border: 2px solid #ccc;
+				border-radius: 5px;
+				font-size: 16px;
+			}
+			#result {
+				display: none;
+				margin-top: 20px;
+				padding: 10px;
+				background: #dff0d8;
+				border: 1px solid #3c763d;
+				border-radius: 5px;
+				color: #3c763d;
+			}
+			.correct {
+				display: block;
+			}
+			.incorrect {
+				display: none;
+				color: #a94442;
+			}
+			button {
+				padding: 10px 20px;
+				margin-top: 10px;
+				background: #007bff;
+				border: none;
+				border-radius: 5px;
+				color: #fff;
+				cursor: pointer;
+				transition: background-color 0.3s;
+			}
+			button:hover {
+				background: #0056b3;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<h1>
+				consider the last number from the output and type YES if it is a
+				prime number else type NO.
+			</h1>
+			<pre style="font-size: 1.5rem; text-align: left">rows = 5<br>
+x = 0  <br>
+for i in range(rows, 0, -1):<br>
+    x += 1<br>
+    for j in range(1, i + 1):<br>
+        print(x, end=' ')<br>
+    print('\r')</pre>
+		</div>
+	</body>
+</html>

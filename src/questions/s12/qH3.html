@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Crack it!</title>
+		<link rel="stylesheet" href="/style.css" />
+		<style>
+			body {
+				background: url("/bg.svg");
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-position: center;
+			}
+		</style>
+		<script>
+			function* gen() {
+				let x = 16;
+				while (true) {
+					if (x % 2 === 0) {
+						yield x / 2;
+						x /= 2;
+					} else {
+						yield x * 3 + 1;
+						x = x * 3 + 1;
+					}
+				}
+			}
+
+			function rusk() {
+				return [
+					gen,
+					"Did you read the how.txt? It helps use this generator",
+				];
+			}
+		</script>
+	</head>
+	<body>
+		<h1>
+			Wait! Don't <a download href="/how.txt">download.txt!</a> or maybe
+			try
+		</h1>
+		<p>What's the sequence 16 _ _ _ _</p>
+	</body>
+</html>

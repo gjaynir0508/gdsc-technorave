@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Crack it!</title>
+		<link rel="stylesheet" href="/style.css" />
+	</head>
+	<body>
+		<pre
+			class="hljs"
+			style="
+				display: block;
+				overflow-x: auto;
+				padding: 0.5em;
+				background: rgb(68, 68, 68);
+				color: rgb(221, 221, 221);
+			"
+		><span class="hljs-comment" style="color: rgb(119, 119, 119);"># Code Snippet</span>
+<span class="hljs-function"><span class="hljs-keyword" style="color: rgb(255, 255, 255); font-weight: 700;">def</span> <span class="hljs-title" style="color: rgb(221, 136, 136); font-weight: 700;">mystery_function</span><span class="hljs-params">(input_string)</span>:</span>
+    <span class="hljs-keyword" style="color: rgb(255, 255, 255); font-weight: 700; opacity: 0">return</span> <span class="hljs-string" style="color: rgb(221, 136, 136);">''</span>.join([char.upper() <span class="hljs-keyword" style="color: rgb(255, 255, 255); font-weight: 700;">if</span> char.islower() <span class="hljs-keyword" style="color: rgb(255, 255, 255); font-weight: 700;">else</span> char.lower() <span class="hljs-keyword" style="color: rgb(255, 255, 255); font-weight: 700;">for</span> char <span class="hljs-keyword" style="color: rgb(255, 255, 255); font-weight: 700;">in</span> input_string])
+
+<span class="hljs-comment" style="color: rgb(119, 119, 119);"># Use the mystery function to decode the message</span>
+encoded_message = <span class="hljs-string" style="color: rgb(221, 136, 136);">"rNxNYYz oB <span style="color: rgb(68, 68, 68)">N</span>byg"</span>
+decoded_message = mystery_function(encoded_message)
+print(decoded_message[<span style="user-select: none; opacity: 0;">1</span>1:])
+</pre>
+		<p style="cursor: help">
+			Wait! Am I actually c<span
+				style="color: #f0f0f0; border-bottom: 1px solid #333"
+				>o</span
+			>mplete?
+		</p>
+	</body>
+</html>
