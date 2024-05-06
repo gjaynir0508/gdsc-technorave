@@ -33,8 +33,7 @@ export async function GET() {
 	await pushQuestions(nextSession.toString());
 	console.log("Added new questions to the session table");
 
-	return {
+	return new Response("Moved to next session", {
 		status: 200,
-		body: "Moved to next session",
-	};
+	});
 }

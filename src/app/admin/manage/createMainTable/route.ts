@@ -14,4 +14,6 @@ export async function GET() {
         name VARCHAR(30),
         progress INT DEFAULT 0,
         time INT DEFAULT 0)`;
+
+	return new Response("Table created", { status: 200 });
 }
