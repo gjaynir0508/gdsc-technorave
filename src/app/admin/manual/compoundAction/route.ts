@@ -1,7 +1,9 @@
 import { pushQuestions } from "@/lib/manageDB";
 import { sql } from "@vercel/postgres";
+import { unstable_noStore } from "next/cache";
 
 export async function GET() {
+	unstable_noStore();
 	// const cur = 1;
 	// const curSession = "s" + cur;
 	// const nextSession = "s" + (cur + 1);

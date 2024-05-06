@@ -1,7 +1,9 @@
 import { sql } from "@vercel/postgres";
+import { unstable_noStore } from "next/cache";
 
 export async function GET() {
-	await sql`CREATE TABLE s1 (
+	unstable_noStore();
+	await sql`CREATE TABLE IF NOT EXISTS s1 (
         id NUMERIC(12) PRIMARY KEY, 
         clue1 VARCHAR(10), 
         clue2 VARCHAR(10),
