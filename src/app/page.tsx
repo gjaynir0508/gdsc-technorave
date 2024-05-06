@@ -4,8 +4,10 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SubmitBtn from "./SubmitBtn";
+import { unstable_noStore } from "next/cache";
 
 export default async function Home() {
+	unstable_noStore();
 	const loggedIn =
 		cookies().get("data") !== undefined &&
 		cookies().get("data")?.value.toString() !== "";
