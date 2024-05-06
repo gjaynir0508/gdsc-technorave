@@ -6,17 +6,15 @@ export async function GET() {
 	const nextSession = await get("nextSession");
 
 	if (!curSession) {
-		return {
+		return new Response("Waiting for the first session to start", {
 			status: 200,
-			body: "Waiting for the next session to start",
-		};
+		});
 	}
 
 	if (!nextSession) {
-		return {
+		return new Response("No next session to move to", {
 			status: 200,
-			body: "No more sessions left to start. Please contact the admin to start a new session.",
-		};
+		});
 	}
 
 	console.log(
